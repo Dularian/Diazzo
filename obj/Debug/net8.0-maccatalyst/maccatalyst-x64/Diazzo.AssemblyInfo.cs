@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Diazzo")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0+30961b32f84dd818f5c9615d36b23d57b69dfc26")]
 [assembly: System.Reflection.AssemblyProductAttribute("Diazzo")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Diazzo")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
