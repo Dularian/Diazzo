@@ -1,0 +1,1 @@
+C:\Source\Diazzo\Diazzo.csproj;x64
