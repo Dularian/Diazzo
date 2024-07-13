@@ -10,4 +10,9 @@
             <RootComponent Selector="#app" ComponentType="{x:Type local:Components.Routes}" />
         </BlazorWebView.RootComponents>
     </BlazorWebView>
+
+    <StackLayout Orientation="Horizontal" Spacing="5" Padding="5" VerticalOptions="End" HorizontalOptions="FillAndExpand">
+        <Button HorizontalOptions="FillAndExpand" CornerRadius="25" Text="Round Page"/>
+        <Button HorizontalOptions="FillAndExpand" CornerRadius="25" Text="User Page"/>
+    </StackLayout>
 </ContentPage>
