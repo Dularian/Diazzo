@@ -1,6 +1,4 @@
-﻿using Microsoft.Extensions.Logging;
-
-namespace Diazzo
+﻿namespace Diazzo
 {
     public static class MauiProgram
     {
@@ -15,9 +13,9 @@ namespace Diazzo
                 });
 
             builder.Services.AddMauiBlazorWebView();
-
+            builder.Services.AddSingleton<RoundDatabase>();
 #if DEBUG
-    		builder.Services.AddBlazorWebViewDeveloperTools();
+            builder.Services.AddBlazorWebViewDeveloperTools();
     		builder.Logging.AddDebug();
 #endif
 
