@@ -2,18 +2,21 @@
 
 <div id="app-container">
     <div id="header">
-        <RadzenStack class="flexssss flex-1 justify-between w-100 p-2 position-relative">
-            <RadzenImage Path="images/icon.png" class="w-24" AlternateText="url image" />
-            <div class="font-mono text-lg fw-bolder absolute left-8 top-8">Diazzo</div>
-            <div class="bg-light flex flex-1"></div>
+        <RadzenStack class="items-center justify-center w-100 p-2 position-relative">
+            <div class="flex justify-content-between">
+                <RadzenImage Path="images/icon.png" class="w-24" AlternateText="url image" />
+                <div class="font-mono text-lg fw-bolder absolute left-8 top-8">Diazzo</div>
+                <RadzenImage Path="images/backpack.png" class="p-2 h-20 w-20" AlternateText="url image" />
+            </div>
+            
         </RadzenStack>
     </div>
     <div id="main-view">
-
+        
     </div>
     <div id="nav-buttons" class="px-3">
-        <RadzenButton Text="Home"></RadzenButton>
-        <RadzenButton Text="Rounds"></RadzenButton>
-        <RadzenButton Text="Analytics"></RadzenButton>
+        <RadzenButton class="flex-1 m-1 truncate" Text="Home"></RadzenButton>
+        <RadzenButton class="flex-1 m-1 truncate" Text="Rounds" ></RadzenButton>
+        <RadzenButton class="flex-1 m-1 truncate" Text="Analytics"></RadzenButton>
     </div>
 </div>

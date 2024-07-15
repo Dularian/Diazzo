@@ -1,13 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace Diazzo.Components.Pages;
 
-namespace Diazzo.Components.Pages
+public partial class Home() 
 {
-    partial class Home()
-    {
 
-    }
 }
