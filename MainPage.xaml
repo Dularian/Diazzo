@@ -4,10 +4,10 @@
              xmlns:local="clr-namespace:Diazzo"
              x:Class="Diazzo.MainPage"
              BackgroundColor="{DynamicResource PageBackgroundColor}">
-
-    <BlazorWebView x:Name="blazorWebView" HostPage="wwwroot/index.html">
-        <BlazorWebView.RootComponents>
-            <RootComponent Selector="#app" ComponentType="{x:Type local:Components.Routes}" />
-        </BlazorWebView.RootComponents>
-    </BlazorWebView>
+    
+        <BlazorWebView x:Name="blazorWebView" HostPage="wwwroot/index.html" BackgroundColor="Aqua">
+            <BlazorWebView.RootComponents>
+                <RootComponent Selector="#app" ComponentType="{x:Type local:Components.Routes}" />
+            </BlazorWebView.RootComponents>
+        </BlazorWebView>
 </ContentPage>

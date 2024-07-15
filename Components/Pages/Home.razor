@@ -1,5 +1,22 @@
 ﻿@page "/"
 
-<h1>Hello, world!</h1>
-
-Welcome to your new app.
+<div id="app-container">
+    <div id="header">
+        <RadzenStack class="items-center justify-center w-100 p-2 position-relative">
+            <div class="flex justify-content-between">
+                <RadzenImage Path="images/icon.png" class="w-24" AlternateText="url image" />
+                <div class="font-mono text-lg fw-bolder absolute left-8 top-8">Diazzo</div>
+                <RadzenImage Path="images/backpack.png" class="p-2 h-20 w-20" AlternateText="url image" />
+            </div>
+            
+        </RadzenStack>
+    </div>
+    <div id="main-view">
+        
+    </div>
+    <div id="nav-buttons" class="px-3">
+        <RadzenButton class="flex-1 m-1 truncate" Text="Home"></RadzenButton>
+        <RadzenButton class="flex-1 m-1 truncate" Text="Rounds" ></RadzenButton>
+        <RadzenButton class="flex-1 m-1 truncate" Text="Analytics"></RadzenButton>
+    </div>
+</div>
