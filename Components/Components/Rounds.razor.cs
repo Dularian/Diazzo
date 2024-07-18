@@ -2,11 +2,19 @@
 
 public partial class Rounds : ComponentBase
 {
-    [Inject] RoundDatabase RoundDatabase {  get; set; }
 
+    private List<Round>? RoundList {  get; set; } = [];
 
-    protected override Task OnInitializedAsync()
+    protected override async Task OnInitializedAsync()
     {
-        return base.OnInitializedAsync();
+        try
+        {
+            RoundList = await RoundDatabase.GetRoundsAsync()! ?? [];
+            await base.OnInitializedAsync();
+        }
+        catch (Exception ex)
+        {
+            throw new Exception(ex.Message);
+        }
     }
 }
