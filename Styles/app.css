@@ -37,6 +37,10 @@ body {
 #main-view {
     height: 90%;
     padding: 20px 20px 20px 20px;
+    background-color:whitesmoke;
+    opacity: .5;
+    margin: 0px 13px 0px 13px;
+    border-radius: 30px;
 }
 
 #nav-buttons {
@@ -44,5 +48,4 @@ body {
     display:flex;
     justify-content:space-between;
     padding: 5px 5px 10px 5px;
-
 }
