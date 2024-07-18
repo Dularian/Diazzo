@@ -45,7 +45,7 @@ public class RoundDatabase
         try
         {
             using Stream fileStream = await FileSystem.Current.OpenAppPackageFileAsync(resourceName);
-            using StreamReader reader = new StreamReader(fileStream);
+            using StreamReader reader = new(fileStream);
             return await reader.ReadToEndAsync();
         }
         catch (Exception ex)

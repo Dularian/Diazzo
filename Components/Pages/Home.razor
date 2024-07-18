@@ -10,12 +10,14 @@
         </RadzenStack>
     </div>
     <div id="main-view">
-        @*I want to add distance tracking for Rounds when I make them if the user wants too*@
-        <Rounds></Rounds>
+        @if (IsRound)
+        {
+            <Rounds></Rounds>
+        }
     </div>
     <div id="nav-buttons" class="px-3">
-        <RadzenButton class="flex-1 m-1 truncate" Text="Home"></RadzenButton>
-        <RadzenButton class="flex-1 m-1 truncate" Text="Rounds" ></RadzenButton>
-        <RadzenButton class="flex-1 m-1 truncate" Text="Stats"></RadzenButton>
+        <RadzenButton class="flex-1 m-1 truncate" Text="Home" Click=@(() => SetHome())></RadzenButton>
+        <RadzenButton class="flex-1 m-1 truncate" Text="Rounds" Click=@(() => SetRound()) ></RadzenButton>
+        <RadzenButton class="flex-1 m-1 truncate" Text="Stats" Click=@(() => SetStats())></RadzenButton>
     </div>
 </div>
