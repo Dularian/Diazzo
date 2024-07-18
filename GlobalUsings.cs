@@ -1,4 +1,5 @@
 ﻿global using SQLite;
+global using System.Text.Json;
 global using System.Text.Json.Serialization;
 global using Diazzo.SQLite.DBAccess;
 global using Microsoft.Extensions.Logging;
