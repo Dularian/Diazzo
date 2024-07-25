@@ -1,13 +1,195 @@
 ﻿@inherits ComponentBase
 
-
-
 <div class="w-100 h-100">
-    <div>
-        <RadzenButton Size="ButtonSize.Medium" Text="Add Round" />
-    </div>
-    @foreach (var round in RoundList)
+    @if (!IsRoundStart)
     {
+        <div class="h-5/6 overflow-y-scroll">
+            @foreach (var groupedround in GroupedRounds!)
+            {
+                <RadzenCard class="bg-white m-1">
+                    <div class="flex flex-col">
+                        <div class="flex flex-col">
+                            <div class="flex-1">
+                                @groupedround.FirstOrDefault()!.RoundDate.Month/
+                                @groupedround.FirstOrDefault()!.RoundDate.Day
+                            </div>
+                            <div class="flex-1">
+                                @groupedround.FirstOrDefault()!.CourseName
+                            </div>
+                        </div>
+                        @foreach(var round in groupedround)
+                        {
+                            <div class="flex flex-1">
+                                <div class="flex-1">
+                                    @round.Player
+                                </div>
+                                @if (round.Score == 0)
+                                {
+                                    <div class="flex-1 text-black text-xl">
+                                        @round.Score
+                                    </div>
+                                }
+                                else if (round.Score > 0)
+                                {
+                                    <div class="flex-1 text-red-600 text-xl">
+                                        +@round.Score
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="flex-1 text-green-500 text-xl">
+                                        @round.Score
+                                    </div>
+                                }
+                            </div>
+                        }
+                    </div>
+                </RadzenCard>
+            }
+        </div>
+        <div class="h-1/6 flex justify-content-center items-end">
+            <RadzenButton Size="ButtonSize.Large" Text="Add Round" Click=@(() => StartAddingPlayers()) />
+        </div>
+    }
 
+    @if (IsRoundStart)
+    {
+        @if (IsAddingPlayers)
+        {
+            <div class="h-2/5 w-100">
+                <RadzenCard>
+                    <div class="flex w-100">
+                        <RadzenTextBox MaxLength="8" @oninput=@(args => UpdateName(args.Value!.ToString())) class="mx-2 w-100" Placeholder="Player name..." @bind-Value=CurrentPlayer.Name/>
+                        <RadzenButton Text="Add" Disabled="@(IsAddDisabled)" Click="AddPlayerToRound" />
+                    </div>
+                </RadzenCard>
+
+                <RadzenText Text="Players" TextAlign="TextAlign.Center" TextStyle="TextStyle.DisplayH3" />
+            </div>
+            <div class="h-2/5 w-100 overflow-y-scroll">
+
+                    @foreach(var player in Players)
+                    {
+                        <div class="flex justify-content-between p-1">
+                            <RadzenCard class="w-50">
+                                <RadzenText Text="@(player.Name)"></RadzenText>
+                            </RadzenCard>
+                            <RadzenButton Click="@(() => RemovePlayer(player))" class="m-2">
+                                <div class="text-xl-center">X</div>
+                            </RadzenButton>
+                        </div>
+                    }
+               
+            </div>
+            <div class="flex justify-content-center items-end h-1/5">
+                <RadzenButton class="w-25 h-50 rounded-3 mr-1" Text="Exit" Click="ExitRound" />
+                <RadzenButton class="w-75 h-50 rounded-3 ml-1" Disabled="@(Players.Count < 1)" Text="Next" Click="FindCourse" />
+            </div>
+        }
+        else if (IsInGame)
+        {
+            <div class="flex flex-col h-4/5 justify-content-end">
+                <div class="flex flex-col justify-center h-1/4">
+                    <RadzenText TextAlign="TextAlign.Center" Text="@SelectedCourse" TextStyle="TextStyle.H5"></RadzenText>
+                    <RadzenText TextAlign="TextAlign.Center" Text="@("Hole " + CurrentHole.ToString())" TextStyle="TextStyle.H4"></RadzenText>
+                </div>
+                <div class="flex flex-col h-3/4 mt-2">
+                    <div class="h-100">
+                        @foreach (var player in Players)
+                        {
+                            <RadzenCard class="flex">
+                                <div class="flex flex-col flex-1 justify-content-start">
+                                    <div class="w-50">
+                                        @player.Name
+                                    </div>
+                                    @if (player.Score == 0)
+                                    {
+                                        <div class="flex-1 text-black text-xl mx-2">
+                                            (@player.Score)
+                                        </div>
+                                    }
+                                    else if (player.Score > 0)
+                                    {
+                                        <div class="flex-1 text-red-600 text-xl mx-2">
+                                            (+@player.Score)
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="flex-1 text-green-500 text-xl mx-2">
+                                            (@player.Score)
+                                        </div>
+                                    }
+                                </div>
+                                <div class="flex flex-1 justify-content-end">
+                                    <RadzenButton Text="-" Click="(() => ChangeScore(player))"/>
+                                    <div class="self-center mx-3">
+                                        @player.HoleScore
+                                    </div>
+                                    <RadzenButton Text="+" Click="(() => ChangeScore(player, true))"/>
+                                </div>
+                            </RadzenCard>
+                        }
+                    </div>
+                </div>
+            </div>
+            <div class="flex justify-content-center items-end h-1/5">
+                <RadzenButton class="w-25 h-50 rounded-3 mr-1" Text="Exit" Click="ExitRound" />
+                @if(CurrentHole == 18)
+                {
+                    <RadzenButton class="w-75 h-50 rounded-3 ml-1" Text="Finish Round" Click="(() => CompleteRound())" />
+                }
+                else
+                {
+                    <RadzenButton class="w-75 h-50 rounded-3 ml-1" Text="Next Hole" Click="(() => OnNextHole())" />
+                }
+            </div>
+        }
+        else if (IsSetCourse)
+        {
+            <div class="flex flex-col flex-1 h-100 w-100 justify-content-center">
+                <div class="h-1/8">
+                    <RadzenText TextAlign="TextAlign.Center" TextStyle="TextStyle.H6" Text="Find your course.." />
+                </div>
+                <div class="h-3/4 my-2">
+                    <RadzenCard class="h-100">
+                        <div class="flex flex-col h-50 w-100">
+                            <RadzenText class="ml-2" Text="State" />
+                            <RadzenDropDown TValue="string" class="mx-1 mt-2 w-100" ValueChanged="((args) => LoadCities(args))" AllowFiltering="true" Data="@(CourseStates)" />
+                            <RadzenText class="ml-2" Text="City" />
+                            <RadzenDropDown TValue="string" class="mx-1 mt-2 w-100" @bind-Value=SelectedCity Data="@(CourseCities)" />
+                            
+                        </div>
+                        <div class=" flex flex-col justify-content-center h-50">
+                            <RadzenButton class="w-100 h-25 mx-2" Text="Skip" Click="StartRound" />
+                        </div>
+                    </RadzenCard>
+                </div>
+                <div class="flex justify-content-center items-end h-1/5">
+                    <RadzenButton class="w-50 h-50 mx-2" Text="Exit" Click="ExitRound" />
+                    <RadzenButton class="w-50 h-50 mx-2" Text="Confirm" Disabled="@(string.IsNullOrEmpty(SelectedCity) || string.IsNullOrEmpty(SelectedState))" Click="LoadCourses" />
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="flex flex-col flex-1 h-100 w-100 justify-content-center">
+                <div class="h-1/4 mt-5">
+                    <RadzenText TextAlign="TextAlign.Center" TextStyle="TextStyle.H4" Text="Find your course.." />
+                </div>
+                <div class="h-1/2">
+                    <RadzenCard class="h-100">
+                        <div class="flex w-100">
+                            <RadzenDropDown TValue="string" class="mx-1 w-100" @bind-Value=SelectedCourse Data="@(CourseNames)" />
+                        </div>
+                    </RadzenCard>
+                </div>
+                <div class="flex justify-content-center items-end h-1/5 mt-2">
+                    <RadzenButton class="w-50 h-50 mx-2" Text="Exit" Click="ExitRound" />
+                    <RadzenButton class="w-50 h-50 mx-2" Text="Confirm" Disabled="@(string.IsNullOrEmpty(SelectedCity) || string.IsNullOrEmpty(SelectedState) || string.IsNullOrEmpty(SelectedCourse))" Click="StartRound" />
+                </div>
+            </div>
+
+        }
     }
 </div>

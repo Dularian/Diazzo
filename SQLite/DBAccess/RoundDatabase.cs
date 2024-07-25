@@ -8,11 +8,14 @@ public class RoundDatabase
         var Connection = new SQLiteAsyncConnection(Constants.DatabasePath, Constants.Flags);
         try
         {
+
+/*            await Connection.DropTableAsync<Course>();
+            await Connection.DropTableAsync<Disc>();*/
+
             await Connection.CreateTableAsync<Round>();
             
             var courseResult = await Connection.CreateTableAsync<Course>();
             var discResult = await Connection.CreateTableAsync<Disc>();
-
 
             if (courseResult == CreateTableResult.Created)
             {
@@ -30,7 +33,7 @@ public class RoundDatabase
         }
         catch (Exception ex)
         {
-            throw new Exception(ex.Message);
+             throw new Exception(ex.Message);
         }
         finally
         {
@@ -81,6 +84,29 @@ public class RoundDatabase
         }
     }
 
+    public static async Task<List<Course>>? GetCoursesAsync()
+    {
+        var Connection = new SQLiteAsyncConnection(Constants.DatabasePath, Constants.Flags);
+        try
+        {
+            var result = await Connection!.Table<Course>().Where(x => x.IsDeleted == false).ToListAsync();
+            await Connection.CloseAsync();
+            if (result.Count > 0)
+            {
+                return result;
+            }
+            return null!;
+        }
+        catch (Exception ex)
+        {
+            throw new Exception(ex.Message);
+        }
+        finally
+        {
+            await Connection.CloseAsync();
+        }
+    }
+
     public static async Task<Round> GetRoundAsync(int id)
     {
         var Connection = new SQLiteAsyncConnection(Constants.DatabasePath, Constants.Flags);
@@ -100,6 +126,7 @@ public class RoundDatabase
         }
     }
 
+    //make this generic
     public static async Task<int> SaveItemAsync(Round item)
     {
         var Connection = new SQLiteAsyncConnection(Constants.DatabasePath, Constants.Flags);
