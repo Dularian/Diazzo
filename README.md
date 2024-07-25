@@ -7,7 +7,7 @@ will allow you to track rounds between you or multiple others. Its a very lightw
 
 ## Can I install this?
 
-The answer is yes. The only things missing are the source files for various dropdowns in the app for finding the course.
+The answer is yes. The only things missing are the json blob files for various dropdowns in the app for finding the course.
 I targeted this app for Android and Windows, so I will show you how to run via Windows. Hopefully soon I can get this on the 
 Google Play Store.
 
@@ -16,6 +16,7 @@ Steps to install project:
 - clone repo to machine
 - open up solution in Visual Studio
 - target Windows Machine in build
+  
 ![image](https://github.com/user-attachments/assets/e011ee95-46d8-4294-b198-70af028c5174)
 - run the project
 
