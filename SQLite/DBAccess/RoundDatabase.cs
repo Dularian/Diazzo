@@ -3,16 +3,19 @@
 public class RoundDatabase
 {
 
-    public async Task Init()
+    public static async Task Init()
     {
+        var Connection = new SQLiteAsyncConnection(Constants.DatabasePath, Constants.Flags);
         try
         {
-            var Connection = new SQLiteAsyncConnection(Constants.DatabasePath, Constants.Flags);
+
+/*            await Connection.DropTableAsync<Course>();
+            await Connection.DropTableAsync<Disc>();*/
+
             await Connection.CreateTableAsync<Round>();
             
             var courseResult = await Connection.CreateTableAsync<Course>();
             var discResult = await Connection.CreateTableAsync<Disc>();
-
 
             if (courseResult == CreateTableResult.Created)
             {
@@ -27,12 +30,14 @@ public class RoundDatabase
                 List<Disc>? discs = JsonSerializer.Deserialize<List<Disc>>(discJson);
                 await Connection.InsertAllAsync(discs);
             }
-
-            await Connection.CloseAsync();
         }
         catch (Exception ex)
         {
-            throw new Exception(ex.Message);
+             throw new Exception(ex.Message);
+        }
+        finally
+        {
+            await Connection.CloseAsync();
         }
     }
 
@@ -40,45 +45,116 @@ public class RoundDatabase
     {
 
         var Connection = new SQLiteAsyncConnection(Constants.DatabasePath, Constants.Flags);
-        using Stream fileStream = await FileSystem.Current.OpenAppPackageFileAsync(resourceName);
-        using StreamReader reader = new StreamReader(fileStream);
-        return await reader.ReadToEndAsync();
+        try
+        {
+            using Stream fileStream = await FileSystem.Current.OpenAppPackageFileAsync(resourceName);
+            using StreamReader reader = new(fileStream);
+            return await reader.ReadToEndAsync();
+        }
+        catch (Exception ex)
+        {
+            throw new Exception(ex.Message);
+        }
+        finally
+        {
+            await Connection.CloseAsync();
+        }
     }
 
-    public async Task<List<Round>>? GetRoundsAsync()
+    public static async Task<List<Round>>? GetRoundsAsync()
     {
         var Connection = new SQLiteAsyncConnection(Constants.DatabasePath, Constants.Flags);
-        var result = await Connection!.Table<Round>().Where(x => x.IsDeleted == false).OrderByDescending(x => x.RoundDate).ToListAsync();
-        if (result.Count > 0)
+        try
         {
+            var result = await Connection!.Table<Round>().Where(x => x.IsDeleted == false).OrderByDescending(x => x.RoundDate).ToListAsync();
+            await Connection.CloseAsync();
+            if (result.Count > 0)
+            {
+                return result;
+            }
+            return null!;
+        }
+        catch(Exception ex)
+        {
+            throw new Exception (ex.Message);
+        }
+        finally
+        {
+            await Connection.CloseAsync(); 
+        }
+    }
+
+    public static async Task<List<Course>>? GetCoursesAsync()
+    {
+        var Connection = new SQLiteAsyncConnection(Constants.DatabasePath, Constants.Flags);
+        try
+        {
+            var result = await Connection!.Table<Course>().Where(x => x.IsDeleted == false).ToListAsync();
+            await Connection.CloseAsync();
+            if (result.Count > 0)
+            {
+                return result;
+            }
+            return null!;
+        }
+        catch (Exception ex)
+        {
+            throw new Exception(ex.Message);
+        }
+        finally
+        {
+            await Connection.CloseAsync();
+        }
+    }
+
+    public static async Task<Round> GetRoundAsync(int id)
+    {
+        var Connection = new SQLiteAsyncConnection(Constants.DatabasePath, Constants.Flags);
+        try
+        {
+            var round = await Connection!.Table<Round>().Where(i => i.Id == id).FirstOrDefaultAsync();
+            await Connection.CloseAsync();
+            return round;
+        }
+        catch (Exception ex)
+        {
+            throw new Exception(ex.Message);
+        }
+        finally
+        {
+            await Connection.CloseAsync();
+        }
+    }
+
+    //make this generic
+    public static async Task<int> SaveItemAsync(Round item)
+    {
+        var Connection = new SQLiteAsyncConnection(Constants.DatabasePath, Constants.Flags);
+        try
+        {
+            int result;
+            if (item.Id != 0)
+            {
+                result = await Connection!.UpdateAsync(item);
+            }
+            else
+            {
+                result = await Connection!.InsertAsync(item);
+            }
+            await Connection.CloseAsync();
             return result;
         }
-        return null!;
-    }
-
-    public async Task<Round> GetRoundAsync(int id)
-    {
-        var Connection = new SQLiteAsyncConnection(Constants.DatabasePath, Constants.Flags);
-        return await Connection!.Table<Round>().Where(i => i.Id == id).FirstOrDefaultAsync();
-    }
-
-    public async Task<int> SaveItemAsync(Round item)
-    {
-        var Connection = new SQLiteAsyncConnection(Constants.DatabasePath, Constants.Flags);
-        int result;
-        if (item.Id != 0)
+        catch (Exception ex)
         {
-            result = await Connection!.UpdateAsync(item);
+            throw new Exception(ex.Message);
         }
-        else
+        finally
         {
-            result = await Connection!.InsertAsync(item);
+            await Connection.CloseAsync();
         }
-
-        return result;
     }
 
-    public async Task<int> DeleteItemAsync(Round item)
+    public static async Task<int> DeleteItemAsync(Round item)
     {
         var Connection = new SQLiteAsyncConnection(Constants.DatabasePath, Constants.Flags);
         return await Connection!.DeleteAsync(item);

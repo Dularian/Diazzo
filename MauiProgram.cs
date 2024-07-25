@@ -1,8 +1,4 @@
-﻿using System.Data;
-using System.Reflection;
-using System.Text.Json;
-
-namespace Diazzo
+﻿namespace Diazzo
 {
     public static class MauiProgram
     {
@@ -21,6 +17,7 @@ namespace Diazzo
             builder.Services.AddTransient<Course>();
             builder.Services.AddTransient<Round>();
             builder.Services.AddTransient<Disc>();
+            builder.Services.AddTransient<Player>();
 #if DEBUG
             builder.Services.AddBlazorWebViewDeveloperTools();
     		builder.Logging.AddDebug();
