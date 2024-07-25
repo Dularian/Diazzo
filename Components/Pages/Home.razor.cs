@@ -2,12 +2,26 @@
 
 public partial class Home() 
 {
-
-    [Inject] RoundDatabase? Database { get; set; }
-
+    public bool IsRound { get; set; }
+    public bool IsStats { get; set; } = true;
 
     protected override async Task OnInitializedAsync()
     {
-        await Database!.Init();
+        await RoundDatabase.Init();
     }
+
+    protected void SetRound()
+    {
+        IsRound = true;
+        IsStats = false;
+        StateHasChanged();
+    }
+
+    protected void SetStats()
+    {
+        IsRound = false;
+        IsStats = true;
+        StateHasChanged();
+    }
+
 }
